@@ -33,7 +33,7 @@ Framework
 - **CertificateValidationTest** (Main Test Class) → Contains test methods to validate certificates.
 
 ## Technologies & Dependencies
-- **Java** (JDK 11+)
+- **Java** openjdk version "1.8.0_442"
 - **TestNG** (Unit testing framework)
 - **Maven** (Build tool)
 - **Allure** (Test reporting framework)
