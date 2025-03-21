@@ -75,7 +75,7 @@ Framework
 ### Setup
 1. **Clone the Repository**:
    ```sh
-   git clone <[repository-url](https://github.com/Animesh-Choudhary/Frameowork>
+   git clone <[repository-url](https://github.com/Animesh-Choudhary/Frameowork)>
    cd certificate-validation-framework
    ```
 2. **Install Dependencies**:
