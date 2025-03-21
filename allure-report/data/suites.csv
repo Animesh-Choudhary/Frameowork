@@ -1,0 +1,2 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"Verify an expired certificate is detected and validation fails","13","testExpiredCertificate","Default Suite","Fri Mar 21 12:43:31 IST 2025","failed","Fri Mar 21 12:43:31 IST 2025","tests.CertificateValidationTest","Frameowork","tests.CertificateValidationTest","testExpiredCertificate"

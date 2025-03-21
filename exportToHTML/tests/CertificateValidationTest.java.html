@@ -1,0 +1,81 @@
+<html>
+<head>
+<title>CertificateValidationTest.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #7a7e85;}
+.s4 { color: #6aab73;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+CertificateValidationTest.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">tests</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">org</span><span class="s2">.</span><span class="s1">testng</span><span class="s2">.</span><span class="s1">Assert</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">org</span><span class="s2">.</span><span class="s1">testng</span><span class="s2">.</span><span class="s1">annotations</span><span class="s2">.</span><span class="s1">Test</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">testbase</span><span class="s2">.</span><span class="s1">BaseTest</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">utils</span><span class="s2">.</span><span class="s1">CertificateUtils</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">context</span><span class="s2">.</span><span class="s1">TestContext</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">io</span><span class="s2">.</span><span class="s1">qameta</span><span class="s2">.</span><span class="s1">allure</span><span class="s2">.*;</span>
+
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">io</span><span class="s2">.</span><span class="s1">File</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">io</span><span class="s2">.</span><span class="s1">FileNotFoundException</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">security</span><span class="s2">.</span><span class="s1">cert</span><span class="s2">.</span><span class="s1">X509Certificate</span><span class="s2">;</span>
+
+<span class="s0">public class </span><span class="s1">CertificateValidationTest </span><span class="s0">extends </span><span class="s1">BaseTest </span><span class="s2">{  </span><span class="s3">// Extend BaseTest</span>
+
+    <span class="s1">@Test</span>
+    <span class="s1">@Severity</span><span class="s2">(</span><span class="s1">SeverityLevel</span><span class="s2">.</span><span class="s1">CRITICAL</span><span class="s2">)</span>
+    <span class="s1">@Description</span><span class="s2">(</span><span class="s4">&quot;Verify a valid certificate can be loaded and validated&quot;</span><span class="s2">)</span>
+    <span class="s1">@Story</span><span class="s2">(</span><span class="s4">&quot;Valid Certificate Validation&quot;</span><span class="s2">)</span>
+    <span class="s0">public void </span><span class="s1">testValidCertificate</span><span class="s2">() </span><span class="s0">throws </span><span class="s1">Exception </span><span class="s2">{</span>
+        <span class="s1">TestContext context </span><span class="s2">= </span><span class="s0">new </span><span class="s1">TestContext</span><span class="s2">();</span>
+        <span class="s1">context</span><span class="s2">.</span><span class="s1">loadCertificate</span><span class="s2">(</span><span class="s4">&quot;certs/cert.pem&quot;</span><span class="s2">);</span>
+        <span class="s1">X509Certificate cert </span><span class="s2">= </span><span class="s1">context</span><span class="s2">.</span><span class="s1">getCertificate</span><span class="s2">();</span>
+
+        <span class="s3">// Check if certificate is loaded</span>
+        <span class="s1">Assert</span><span class="s2">.</span><span class="s1">assertNotNull</span><span class="s2">(</span><span class="s1">cert</span><span class="s2">, </span><span class="s4">&quot;Certificate should not be null&quot;</span><span class="s2">);</span>
+
+        <span class="s3">// Validate Common Name (CN)</span>
+        <span class="s1">String subjectDN </span><span class="s2">= </span><span class="s1">cert</span><span class="s2">.</span><span class="s1">getSubjectDN</span><span class="s2">().</span><span class="s1">getName</span><span class="s2">();</span>
+        <span class="s1">Assert</span><span class="s2">.</span><span class="s1">assertTrue</span><span class="s2">(</span><span class="s1">subjectDN</span><span class="s2">.</span><span class="s1">contains</span><span class="s2">(</span><span class="s4">&quot;CN=mydomain.com&quot;</span><span class="s2">), </span><span class="s4">&quot;CN does not match&quot;</span><span class="s2">);</span>
+
+        <span class="s3">// Validate Issuer (Replace 'O=MyCompany' with the expected issuer)</span>
+        <span class="s1">String issuerDN </span><span class="s2">= </span><span class="s1">cert</span><span class="s2">.</span><span class="s1">getIssuerDN</span><span class="s2">().</span><span class="s1">getName</span><span class="s2">();</span>
+        <span class="s1">Assert</span><span class="s2">.</span><span class="s1">assertTrue</span><span class="s2">(</span><span class="s1">issuerDN</span><span class="s2">.</span><span class="s1">contains</span><span class="s2">(</span><span class="s4">&quot;O=MyCompany&quot;</span><span class="s2">), </span><span class="s4">&quot;Issuer does not match&quot;</span><span class="s2">);</span>
+
+        <span class="s3">// Validate expiration (should not be expired)</span>
+        <span class="s1">cert</span><span class="s2">.</span><span class="s1">checkValidity</span><span class="s2">();</span>
+
+        <span class="s3">// Validate Signature Algorithm</span>
+        <span class="s1">String sigAlg </span><span class="s2">= </span><span class="s1">cert</span><span class="s2">.</span><span class="s1">getSigAlgName</span><span class="s2">();</span>
+        <span class="s1">Assert</span><span class="s2">.</span><span class="s1">assertTrue</span><span class="s2">(</span><span class="s1">sigAlg</span><span class="s2">.</span><span class="s1">equalsIgnoreCase</span><span class="s2">(</span><span class="s4">&quot;SHA256withRSA&quot;</span><span class="s2">), </span><span class="s4">&quot;Signature Algorithm is not SHA-256 with RSA&quot;</span><span class="s2">);</span>
+
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s4">&quot;Certificate validation passed!&quot;</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@Test</span><span class="s2">(</span><span class="s1">expectedExceptions </span><span class="s2">= </span><span class="s1">java</span><span class="s2">.</span><span class="s1">security</span><span class="s2">.</span><span class="s1">cert</span><span class="s2">.</span><span class="s1">CertificateExpiredException</span><span class="s2">.</span><span class="s0">class</span><span class="s2">)</span>
+    <span class="s1">@Severity</span><span class="s2">(</span><span class="s1">SeverityLevel</span><span class="s2">.</span><span class="s1">BLOCKER</span><span class="s2">)</span>
+    <span class="s1">@Description</span><span class="s2">(</span><span class="s4">&quot;Verify expired certificates throw an exception&quot;</span><span class="s2">)</span>
+    <span class="s1">@Story</span><span class="s2">(</span><span class="s4">&quot;Expired Certificate Validation&quot;</span><span class="s2">)</span>
+    <span class="s0">public void </span><span class="s1">testExpiredCertificate</span><span class="s2">() </span><span class="s0">throws </span><span class="s1">Exception </span><span class="s2">{</span>
+        <span class="s1">String certPath </span><span class="s2">= </span><span class="s4">&quot;certs/expired_cert.pem&quot;</span><span class="s2">;</span>
+        <span class="s1">File certFile </span><span class="s2">= </span><span class="s0">new </span><span class="s1">File</span><span class="s2">(</span><span class="s1">certPath</span><span class="s2">);</span>
+
+        <span class="s0">if </span><span class="s2">(!</span><span class="s1">certFile</span><span class="s2">.</span><span class="s1">exists</span><span class="s2">()) {</span>
+            <span class="s0">throw new </span><span class="s1">FileNotFoundException</span><span class="s2">(</span><span class="s4">&quot;Certificate file not found: &quot; </span><span class="s2">+ </span><span class="s1">certPath</span><span class="s2">);</span>
+        <span class="s2">}</span>
+
+        <span class="s1">TestContext context </span><span class="s2">= </span><span class="s0">new </span><span class="s1">TestContext</span><span class="s2">();</span>
+        <span class="s1">context</span><span class="s2">.</span><span class="s1">loadCertificate</span><span class="s2">(</span><span class="s1">certPath</span><span class="s2">);</span>
+        <span class="s1">context</span><span class="s2">.</span><span class="s1">getCertificate</span><span class="s2">().</span><span class="s1">checkValidity</span><span class="s2">(); </span><span class="s3">// Should throw exception</span>
+    <span class="s2">}</span>
+<span class="s2">}</span></pre>
+</body>
+</html>

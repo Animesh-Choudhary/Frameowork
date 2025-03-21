@@ -1,0 +1,12 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="CertificateValidationSuite">
+    <listeners>
+        <listener class-name="listeners.TestListener"/>
+        <listener class-name="io.qameta.allure.testng.AllureTestNg"/>
+    </listeners>
+    <test name="CertificateValidationTests">
+        <classes>
+            <class name="tests.CertificateValidationTest"/>
+        </classes>
+    </test>
+</suite>
